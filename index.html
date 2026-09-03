@@ -190,58 +190,47 @@ function customerReply(text){
   detectName(text);
   detectNeed(text);
 
-  let reply='Baik, silakan Pak/Bu. Saya siap dibantu.';
-  if(conversationTurn===1){
-    if(lower.includes('pagi')||lower.includes('siang')||lower.includes('sore')){
-      reply='Selamat pagi juga. Nama saya '+customerName+'.';
-    }else if(lower.includes('nama')){
-      reply='Nama saya '+customerName+'.';
-    }else{
-      reply='Baik. Nama saya '+customerName+'.';
+  const honor=customerGender==='female'?'Ibu':'Pak/Bu';
+  let reply='Baik, '+honor+'. Silakan, saya siap dibantu.';
+
+  // Jawab sesuai pertanyaan customer/frontliner, bukan hanya berdasarkan nomor giliran.
+  if(lower.includes('siapa') && (lower.includes('ibu')||lower.includes('bapak')||lower.includes('nama'))){
+    reply='Nama saya '+customerName+'.';
+  }else if(lower.includes('nama') && (lower.includes('siapa')||lower.includes('boleh tahu')||lower.includes('dengan'))){
+    reply='Nama saya '+customerName+'.';
+  }else if(customerNeed){
+    if(customerNeed==='setor tunai'){
+      reply='Iya, saya ingin setor tunai. Bisa dibantu prosesnya, '+honor+'?';
+    }else if(customerNeed==='tarik tunai'){
+      reply='Iya, saya ingin tarik tunai. Bisa dibantu prosesnya, '+honor+'?';
+    }else if(customerNeed==='transfer'){
+      reply='Iya, saya ingin melakukan transfer. Bisa dibantu prosesnya, '+honor+'?';
+    }else if(customerNeed==='rekening'){
+      reply='Saya ingin menanyakan tentang rekening. Bisa dibantu, '+honor+'?';
+    }else if(customerNeed==='kartu/ATM'){
+      reply='Saya ingin menanyakan tentang kartu atau ATM. Bisa dibantu, '+honor+'?';
     }
-    customerName=customerGender==='female'?'Sari':'Budi';
-  }else if(conversationTurn===2){
-    if(lower.includes('nama') && !customerName){
-      customerName=customerGender==='female'?'Sari':'Budi';
-      reply='Nama saya '+customerName+'.';
-    }else if(lower.includes('kebutuhan')||lower.includes('bantu')||lower.includes('keperluan')){
-      reply='Saya ingin setor tunai, Pak/Bu.';
-      customerNeed='setor tunai';
-    }else{
-      reply='Baik, Pak/Bu. Saya ingin setor tunai.';
-      customerNeed='setor tunai';
-    }
-  }else if(conversationTurn===3){
-    if(lower.includes('setor')||lower.includes('tunai')){
-      customerNeed='setor tunai';
-      reply='Iya, saya mau setor tunai. Prosesnya bagaimana ya?';
-    }else if(lower.includes('kebutuhan')||lower.includes('bantu')){
-      customerNeed='setor tunai';
-      reply='Saya ingin setor tunai dan ingin tahu apakah bisa dibantu di mesin digital.';
-    }else{
-      reply='Saya ingin setor tunai, Pak/Bu. Bisa dibantu prosesnya?';
-      customerNeed='setor tunai';
-    }
-  }else if(conversationTurn===4){
-    if(lower.includes('mesin')||lower.includes('digital')){
-      reply='Oh baik. Kalau menggunakan mesin digital, apakah tetap perlu bantuan petugas?';
-    }else if(lower.includes('bantu')||lower.includes('proses')){
-      reply='Baik, terima kasih. Saya akan mengikuti arahannya.';
-    }else{
-      reply='Baik, terima kasih. Lalu langkah berikutnya apa ya?';
-    }
+  }else if(lower.includes('pagi')){
+    reply='Selamat pagi juga. Nama saya '+customerName+'.';
+  }else if(lower.includes('siang')){
+    reply='Selamat siang juga. Nama saya '+customerName+'.';
+  }else if(lower.includes('sore')){
+    reply='Selamat sore juga. Nama saya '+customerName+'.';
+  }else if(lower.includes('kebutuhan')||lower.includes('bantu')||lower.includes('keperluan')){
+    reply='Saya ingin melakukan setor tunai. Bisa dibantu prosesnya, '+honor+'?';
+    customerNeed='setor tunai';
   }else{
-    const options=[
-      'Baik, terima kasih penjelasannya. Saya mengerti.',
-      'Oh begitu. Terima kasih sudah membantu saya.',
-      'Baik, saya ikuti arahannya. Terima kasih ya.',
-      'Siap, Pak/Bu. Terima kasih atas bantuannya.'
-    ];
-    reply=options[(conversationTurn-5)%options.length];
+    // Jika belum jelas, customer meminta frontliner menggali kebutuhan.
+    reply='Baik, '+honor+'. Saya ingin melakukan transaksi. Apa yang perlu saya siapkan?';
   }
 
   if(reply===lastCustomerReply){
-    reply='Baik, saya mengerti. Silakan dilanjutkan, Pak/Bu.';
+    const alternatives=[
+      'Baik, saya mengerti. Silakan dilanjutkan, '+honor+'.',
+      'Iya, baik. Saya siap mengikuti arahannya.',
+      'Baik, terima kasih. Silakan dibantu.'
+    ];
+    reply=alternatives[(conversationTurn-1)%alternatives.length];
   }
   lastCustomerReply=reply;
 
@@ -257,7 +246,6 @@ function customerReply(text){
 
   speakCustomer(reply);
 }
-
 function speakCustomer(text){
   if(!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
