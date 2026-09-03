@@ -79,7 +79,44 @@ function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.re
 function openRole(n,i,d){current=n;document.getElementById('roleTitle').textContent=i+' '+n;document.getElementById('roleDesc').textContent=d;show('role')}
 function selectLevel(level){selectedLevel=level;document.querySelectorAll('.level').forEach(x=>x.classList.remove('selected'));document.getElementById('level'+level).classList.add('selected');document.getElementById('level'+level).querySelector('b').textContent=level+' ✓'}
 function startChat(){document.getElementById('chatTitle').textContent=current+' - Level '+selectedLevel;document.getElementById('userBubble').style.display='none';show('chat')}
-function speak(){let b=document.getElementById('userBubble');b.style.display='block';b.textContent='“Selamat pagi Bapak, selamat datang. Perkenalkan saya Andi. Boleh saya tahu dengan Bapak siapa?”';setTimeout(()=>show('result'),700)}
+let recognition=null;
+let listening=false;
+
+function speak(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){
+    const text=prompt('Browser belum mendukung microphone. Ketik respons Anda:');
+    if(text) showUserText(text);
+    return;
+  }
+  if(listening) return;
+  recognition=new SR();
+  recognition.lang='id-ID';
+  recognition.interimResults=false;
+  recognition.maxAlternatives=1;
+  recognition.onstart=()=>{listening=true;document.querySelector('.mic').textContent='⏹️'};
+  recognition.onresult=(e)=>{
+    const text=e.results[0][0].transcript;
+    showUserText(text);
+  };
+  recognition.onerror=(e)=>{
+    listening=false;
+    document.querySelector('.mic').textContent='🎙️';
+    if(e.error==='not-allowed') alert('Izin microphone belum diberikan. Silakan izinkan microphone untuk AI ROLEPLAY.');
+    else alert('Microphone belum menangkap suara. Silakan coba lagi.');
+  };
+  recognition.onend=()=>{
+    listening=false;
+    document.querySelector('.mic').textContent='🎙️';
+  };
+  recognition.start();
+}
+
+function showUserText(text){
+  const b=document.getElementById('userBubble');
+  b.style.display='block';
+  b.textContent='“'+text+'”';
+}
 </script>
 </body>
 </html>
