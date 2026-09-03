@@ -168,10 +168,13 @@ function showUserText(text){
 }
 
 function detectName(text){
-  const m=text.match(/(?:nama saya|saya bernama|saya)\s+([A-Za-zÀ-ÿ]{2,20})(?:\s|$|[,.])/i);
+  // Hanya ambil nama jika customer sendiri mengatakan "nama saya ..." atau "saya bernama ...".
+  // Jangan memakai pola umum "saya ..." karena kalimat frontliner seperti
+  // "ada yang bisa saya bantu" dapat membuat kata "bantu" terbaca sebagai nama.
+  const m=text.match(/(?:nama saya|saya bernama)\s+([A-Za-zÀ-ÿ]{2,20})(?:\s|$|[,.])/i);
   if(m){
-    const candidate=m[1];
-    const blocked=['mau','ingin','akan','datang','butuh','perlu','bisa','ingin'];
+    const candidate=m[1].trim();
+    const blocked=['mau','ingin','akan','datang','butuh','perlu','bisa','ingin','melakukan','dibantu','bantu'];
     if(!blocked.includes(candidate.toLowerCase())) customerName=candidate;
   }
 }
@@ -210,6 +213,8 @@ function customerReply(text){
     }else if(customerNeed==='kartu/ATM'){
       reply='Saya ingin menanyakan tentang kartu atau ATM. Bisa dibantu, '+honor+'?';
     }
+  }else if(lower.includes('ada yang bisa saya bantu') || lower.includes('bisa saya bantu')){
+    reply='Selamat pagi juga. Nama saya '+customerName+'. Saya ingin melakukan transaksi.';
   }else if(lower.includes('pagi')){
     reply='Selamat pagi juga. Nama saya '+customerName+'.';
   }else if(lower.includes('siang')){
