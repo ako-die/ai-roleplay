@@ -49,19 +49,6 @@ button{font:inherit;cursor:pointer}.primary{width:100%;border:0;background:#ffc9
 <div class="hero"><h2 id="roleTitle">👋 Greeting</h2><p id="roleDesc"></p>
 <ul class="checks"><li>Menyapa dengan ramah</li><li>Antusias dalam melayani</li><li>Menanyakan nama customer</li><li>Menyebut nama customer</li><li>Menanyakan kebutuhan customer</li></ul></div>
 <p><b>Pilih Level</b></p>
-
-<div class="card" style="margin:16px 0;padding:16px">
-  <h3 style="margin-top:0">Pilih Customer</h3>
-  <div style="display:flex;gap:12px;flex-wrap:wrap">
-    <button type="button" id="genderMale" class="level-card selected" onclick="selectCustomerGender('male')" style="flex:1;min-width:130px">
-      👨 Pria <span id="genderMaleCheck">✓</span>
-    </button>
-    <button type="button" id="genderFemale" class="level-card" onclick="selectCustomerGender('female')" style="flex:1;min-width:130px">
-      👩 Wanita <span id="genderFemaleCheck" style="display:none">✓</span>
-    </button>
-  </div>
-</div>
-
 <div class="levels">
 <div id="levelEasy" class="level" onclick="selectLevel('Easy')"><b>Easy</b>Customer ramah</div>
 <div id="levelNormal" class="level selected" onclick="selectLevel('Normal')"><b>Normal ✓</b>Customer biasa</div>
@@ -91,38 +78,10 @@ let selectedLevel='Normal';
 function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
 function openRole(n,i,d){current=n;document.getElementById('roleTitle').textContent=i+' '+n;document.getElementById('roleDesc').textContent=d;show('role')}
 function selectLevel(level){selectedLevel=level;document.querySelectorAll('.level').forEach(x=>x.classList.remove('selected'));document.getElementById('level'+level).classList.add('selected');document.getElementById('level'+level).querySelector('b').textContent=level+' ✓'}
-
-function selectCustomerGender(gender){
-  customerGender=gender;
-  const male=document.getElementById('genderMale');
-  const female=document.getElementById('genderFemale');
-  const maleCheck=document.getElementById('genderMaleCheck');
-  const femaleCheck=document.getElementById('genderFemaleCheck');
-  if(male&&female){
-    male.classList.toggle('selected',gender==='male');
-    female.classList.toggle('selected',gender==='female');
-  }
-  if(maleCheck) maleCheck.style.display=gender==='male'?'inline':'none';
-  if(femaleCheck) femaleCheck.style.display=gender==='female'?'inline':'none';
-}
-
-function startChat(){
-  conversationTurn=0;
-  customerName=customerGender==='female'?'Sari':'Budi';
-  customerNeed='';
-  lastCustomerReply='';
-  const title=document.getElementById('chatTitle');
-  if(title) title.textContent=current+' - Level '+selectedLevel+' • '+(customerGender==='female'?'👩 Customer Wanita':'👨 Customer Pria');
-  const userBubble=document.getElementById('userBubble');
-  if(userBubble) userBubble.style.display='none';
-  const oldReply=document.getElementById('customerReply');
-  if(oldReply) oldReply.remove();
-  show('chat');
-}
+function startChat(){document.getElementById('chatTitle').textContent=current+' - Level '+selectedLevel;document.getElementById('userBubble').style.display='none';show('chat')}
 let recognition=null;
 let listening=false;
 let conversationTurn=0;
-let customerGender='male';
 let customerName='';
 let customerNeed='';
 let lastCustomerReply='';
@@ -168,13 +127,10 @@ function showUserText(text){
 }
 
 function detectName(text){
-  // Hanya ambil nama jika customer sendiri mengatakan "nama saya ..." atau "saya bernama ...".
-  // Jangan memakai pola umum "saya ..." karena kalimat frontliner seperti
-  // "ada yang bisa saya bantu" dapat membuat kata "bantu" terbaca sebagai nama.
-  const m=text.match(/(?:nama saya|saya bernama)\s+([A-Za-zÀ-ÿ]{2,20})(?:\s|$|[,.])/i);
+  const m=text.match(/(?:nama saya|saya bernama|saya)\s+([A-Za-zÀ-ÿ]{2,20})(?:\s|$|[,.])/i);
   if(m){
-    const candidate=m[1].trim();
-    const blocked=['mau','ingin','akan','datang','butuh','perlu','bisa','ingin','melakukan','dibantu','bantu'];
+    const candidate=m[1];
+    const blocked=['mau','ingin','akan','datang','butuh','perlu','bisa','ingin'];
     if(!blocked.includes(candidate.toLowerCase())) customerName=candidate;
   }
 }
@@ -193,49 +149,58 @@ function customerReply(text){
   detectName(text);
   detectNeed(text);
 
-  const honor=customerGender==='female'?'Ibu':'Pak/Bu';
-  let reply='Baik, '+honor+'. Silakan, saya siap dibantu.';
-
-  // Jawab sesuai pertanyaan customer/frontliner, bukan hanya berdasarkan nomor giliran.
-  if(lower.includes('siapa') && (lower.includes('ibu')||lower.includes('bapak')||lower.includes('nama'))){
-    reply='Nama saya '+customerName+'.';
-  }else if(lower.includes('nama') && (lower.includes('siapa')||lower.includes('boleh tahu')||lower.includes('dengan'))){
-    reply='Nama saya '+customerName+'.';
-  }else if(customerNeed){
-    if(customerNeed==='setor tunai'){
-      reply='Iya, saya ingin setor tunai. Bisa dibantu prosesnya, '+honor+'?';
-    }else if(customerNeed==='tarik tunai'){
-      reply='Iya, saya ingin tarik tunai. Bisa dibantu prosesnya, '+honor+'?';
-    }else if(customerNeed==='transfer'){
-      reply='Iya, saya ingin melakukan transfer. Bisa dibantu prosesnya, '+honor+'?';
-    }else if(customerNeed==='rekening'){
-      reply='Saya ingin menanyakan tentang rekening. Bisa dibantu, '+honor+'?';
-    }else if(customerNeed==='kartu/ATM'){
-      reply='Saya ingin menanyakan tentang kartu atau ATM. Bisa dibantu, '+honor+'?';
+  let reply='Baik, silakan Pak/Bu. Saya siap dibantu.';
+  if(conversationTurn===1){
+    if(lower.includes('pagi')||lower.includes('siang')||lower.includes('sore')){
+      reply='Selamat pagi juga. Nama saya Budi.';
+    }else if(lower.includes('nama')){
+      reply='Nama saya Budi.';
+    }else{
+      reply='Baik. Nama saya Budi.';
     }
-  }else if(lower.includes('ada yang bisa saya bantu') || lower.includes('bisa saya bantu')){
-    reply='Selamat pagi juga. Nama saya '+customerName+'. Saya ingin melakukan transaksi.';
-  }else if(lower.includes('pagi')){
-    reply='Selamat pagi juga. Nama saya '+customerName+'.';
-  }else if(lower.includes('siang')){
-    reply='Selamat siang juga. Nama saya '+customerName+'.';
-  }else if(lower.includes('sore')){
-    reply='Selamat sore juga. Nama saya '+customerName+'.';
-  }else if(lower.includes('kebutuhan')||lower.includes('bantu')||lower.includes('keperluan')){
-    reply='Saya ingin melakukan setor tunai. Bisa dibantu prosesnya, '+honor+'?';
-    customerNeed='setor tunai';
+    customerName='Budi';
+  }else if(conversationTurn===2){
+    if(lower.includes('nama') && !customerName){
+      customerName='Budi';
+      reply='Nama saya Budi.';
+    }else if(lower.includes('kebutuhan')||lower.includes('bantu')||lower.includes('keperluan')){
+      reply='Saya ingin setor tunai, Pak/Bu.';
+      customerNeed='setor tunai';
+    }else{
+      reply='Baik, Pak/Bu. Saya ingin setor tunai.';
+      customerNeed='setor tunai';
+    }
+  }else if(conversationTurn===3){
+    if(lower.includes('setor')||lower.includes('tunai')){
+      customerNeed='setor tunai';
+      reply='Iya, saya mau setor tunai. Prosesnya bagaimana ya?';
+    }else if(lower.includes('kebutuhan')||lower.includes('bantu')){
+      customerNeed='setor tunai';
+      reply='Saya ingin setor tunai dan ingin tahu apakah bisa dibantu di mesin digital.';
+    }else{
+      reply='Saya ingin setor tunai, Pak/Bu. Bisa dibantu prosesnya?';
+      customerNeed='setor tunai';
+    }
+  }else if(conversationTurn===4){
+    if(lower.includes('mesin')||lower.includes('digital')){
+      reply='Oh baik. Kalau menggunakan mesin digital, apakah tetap perlu bantuan petugas?';
+    }else if(lower.includes('bantu')||lower.includes('proses')){
+      reply='Baik, terima kasih. Saya akan mengikuti arahannya.';
+    }else{
+      reply='Baik, terima kasih. Lalu langkah berikutnya apa ya?';
+    }
   }else{
-    // Jika belum jelas, customer meminta frontliner menggali kebutuhan.
-    reply='Baik, '+honor+'. Saya ingin melakukan transaksi. Apa yang perlu saya siapkan?';
+    const options=[
+      'Baik, terima kasih penjelasannya. Saya mengerti.',
+      'Oh begitu. Terima kasih sudah membantu saya.',
+      'Baik, saya ikuti arahannya. Terima kasih ya.',
+      'Siap, Pak/Bu. Terima kasih atas bantuannya.'
+    ];
+    reply=options[(conversationTurn-5)%options.length];
   }
 
   if(reply===lastCustomerReply){
-    const alternatives=[
-      'Baik, saya mengerti. Silakan dilanjutkan, '+honor+'.',
-      'Iya, baik. Saya siap mengikuti arahannya.',
-      'Baik, terima kasih. Silakan dibantu.'
-    ];
-    reply=alternatives[(conversationTurn-1)%alternatives.length];
+    reply='Baik, saya mengerti. Silakan dilanjutkan, Pak/Bu.';
   }
   lastCustomerReply=reply;
 
@@ -251,24 +216,40 @@ function customerReply(text){
 
   speakCustomer(reply);
 }
+
 function speakCustomer(text){
   if(!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang='id-ID';
-  u.rate=0.95;
-  u.pitch=customerGender==='female'?1.12:0.90;
 
+  const utterance=new SpeechSynthesisUtterance(text);
+  utterance.lang='id-ID';
+  utterance.rate=0.94;
+
+  // V4 tetap dipertahankan. Hanya suara AI Customer yang dibuat lebih maskulin.
+  // Prioritaskan voice Indonesia yang namanya mengandung indikasi suara pria.
   const voices=window.speechSynthesis.getVoices();
   const idVoices=voices.filter(v=>(v.lang||'').toLowerCase().startsWith('id'));
-  const hints=customerGender==='female'
-    ? ['female','woman','perempuan','wanita','sari']
-    : ['male','man','laki','pria','budi'];
+  const maleHints=['male','man','pria','laki','bapak','david','andi','rudi','budi'];
+  const maleVoice=idVoices.find(v=>
+    maleHints.some(h=>(v.name||'').toLowerCase().includes(h))
+  );
 
-  let chosen=idVoices.find(v=>hints.some(h=>(v.name||'').toLowerCase().includes(h)));
-  if(!chosen) chosen=idVoices[0] || voices.find(v=>(v.lang||'').toLowerCase().startsWith('id'));
-  if(chosen) u.voice=chosen;
-  window.speechSynthesis.speak(u);
+  if(maleVoice){
+    utterance.voice=maleVoice;
+    utterance.pitch=0.88;
+  }else{
+    // Jika perangkat hanya menyediakan voice wanita Indonesia,
+    // gunakan voice Indonesia yang tersedia dengan pitch lebih rendah.
+    utterance.voice=idVoices[0] || voices.find(v=>(v.lang||'').toLowerCase().startsWith('id')) || null;
+    utterance.pitch=0.72;
+  }
+
+  window.speechSynthesis.speak(utterance);
+}
+
+// Beberapa browser Android baru mengisi daftar voice setelah voiceschanged.
+if('speechSynthesis' in window){
+  window.speechSynthesis.onvoiceschanged=function(){};
 }
 
 function typeAlternative(){
@@ -276,7 +257,17 @@ function typeAlternative(){
   if(text && text.trim()) showUserText(text.trim());
 }
 
-
+function startChat(){
+  conversationTurn=0;
+  customerName='';
+  customerNeed='';
+  lastCustomerReply='';
+  document.getElementById('chatTitle').textContent=current+' - Level '+selectedLevel;
+  document.getElementById('userBubble').style.display='none';
+  const oldReply=document.getElementById('customerReply');
+  if(oldReply) oldReply.remove();
+  show('chat');
+}
 </script>
 </body>
 </html>
