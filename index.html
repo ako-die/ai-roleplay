@@ -115,6 +115,8 @@ function startChat(){
   if(title) title.textContent=current+' - Level '+selectedLevel+' • '+(customerGender==='female'?'👩 Customer Wanita':'👨 Customer Pria');
   const userBubble=document.getElementById('userBubble');
   if(userBubble) userBubble.style.display='none';
+  const oldReply=document.getElementById('customerReply');
+  if(oldReply) oldReply.remove();
   show('chat');
 }
 let recognition=null;
@@ -191,17 +193,17 @@ function customerReply(text){
   let reply='Baik, silakan Pak/Bu. Saya siap dibantu.';
   if(conversationTurn===1){
     if(lower.includes('pagi')||lower.includes('siang')||lower.includes('sore')){
-      reply='Selamat pagi juga. Nama saya Budi.';
+      reply='Selamat pagi juga. Nama saya '+customerName+'.';
     }else if(lower.includes('nama')){
-      reply='Nama saya Budi.';
+      reply='Nama saya '+customerName+'.';
     }else{
-      reply='Baik. Nama saya Budi.';
+      reply='Baik. Nama saya '+customerName+'.';
     }
     customerName=customerGender==='female'?'Sari':'Budi';
   }else if(conversationTurn===2){
     if(lower.includes('nama') && !customerName){
       customerName=customerGender==='female'?'Sari':'Budi';
-      reply='Nama saya Budi.';
+      reply='Nama saya '+customerName+'.';
     }else if(lower.includes('kebutuhan')||lower.includes('bantu')||lower.includes('keperluan')){
       reply='Saya ingin setor tunai, Pak/Bu.';
       customerNeed='setor tunai';
@@ -281,17 +283,7 @@ function typeAlternative(){
   if(text && text.trim()) showUserText(text.trim());
 }
 
-function startChat(){
-  conversationTurn=0;
-  customerName='';
-  customerNeed='';
-  lastCustomerReply='';
-  document.getElementById('chatTitle').textContent=current+' - Level '+selectedLevel;
-  document.getElementById('userBubble').style.display='none';
-  const oldReply=document.getElementById('customerReply');
-  if(oldReply) oldReply.remove();
-  show('chat');
-}
+
 </script>
 </body>
 </html>
