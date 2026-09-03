@@ -63,7 +63,7 @@ button{font:inherit;cursor:pointer}.primary{width:100%;border:0;background:#ffc9
 <div class="chat"><b>🤖 AI Customer</b><div class="ai">“Selamat pagi, saya ingin melakukan transaksi.”</div>
 <div id="userBubble" class="user" style="display:none"></div>
 <button class="mic" onclick="speak()">🎙️</button><p style="text-align:center;color:#6c8499">Tekan mikrofon dan ucapkan respons Anda</p>
-<button class="primary" onclick="speak()">Ketik Teks Sebagai Alternatif</button></div></div></section>
+<button class="primary" onclick="typeAlternative()">Ketik Teks Sebagai Alternatif</button></div></div></section>
 
 <section id="result" class="screen"><div class="content">
 <button class="back" onclick="show('home')">← Home</button><div class="result"><h2>Roleplay Selesai! 🎉</h2><div class="circle">86</div><b>Score Anda / 100</b><p>Greeting • Level Normal</p>
@@ -116,7 +116,47 @@ function showUserText(text){
   const b=document.getElementById('userBubble');
   b.style.display='block';
   b.textContent='“'+text+'”';
+  setTimeout(()=>customerReply(text),700);
 }
+
+function customerReply(text){
+  const lower=text.toLowerCase();
+  let reply='Baik, terima kasih. Saya ingin melakukan transaksi. Bisa dibantu?';
+  if(lower.includes('nama') || lower.includes('siapa')){
+    reply='Nama saya Budi. Saya ingin melakukan transaksi.';
+  }else if(lower.includes('kebutuhan') || lower.includes('bantu') || lower.includes('transaksi')){
+    reply='Saya ingin setor tunai dan sekalian bertanya tentang layanan yang tersedia.';
+  }else if(lower.includes('selamat') || lower.includes('pagi') || lower.includes('siang')){
+    reply='Terima kasih. Nama saya Budi. Saya ingin melakukan transaksi.';
+  }
+
+  const chat=document.querySelector('.chat');
+  const oldReply=document.getElementById('customerReply');
+  if(oldReply) oldReply.remove();
+
+  const div=document.createElement('div');
+  div.id='customerReply';
+  div.className='ai';
+  div.innerHTML='<b>🤖 AI Customer</b><br>“'+reply+'”';
+  chat.insertBefore(div, document.querySelector('.mic'));
+
+  speakCustomer(reply);
+}
+
+function speakCustomer(text){
+  if(!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const utterance=new SpeechSynthesisUtterance(text);
+  utterance.lang='id-ID';
+  utterance.rate=0.95;
+  utterance.pitch=1;
+  window.speechSynthesis.speak(utterance);
+}
+function typeAlternative(){
+  const text=prompt('Ketik respons Anda:');
+  if(text && text.trim()) showUserText(text.trim());
+}
+
 </script>
 </body>
 </html>
