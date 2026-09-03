@@ -77,7 +77,24 @@ let selectedLevel='Normal';
 
 function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
 function openRole(n,i,d){current=n;document.getElementById('roleTitle').textContent=i+' '+n;document.getElementById('roleDesc').textContent=d;show('role')}
-function selectLevel(level){selectedLevel=level;document.querySelectorAll('.level').forEach(x=>x.classList.remove('selected'));document.getElementById('level'+level).classList.add('selected');document.getElementById('level'+level).querySelector('b').textContent=level+' ✓'}
+function selectLevel(level){
+  selectedLevel=level;
+
+  document.querySelectorAll('.level').forEach(card=>{
+    card.classList.remove('selected');
+    const title=card.querySelector('b');
+    if(title){
+      title.textContent=title.textContent.replace(/\s*✓\s*$/,'');
+    }
+  });
+
+  const selected=document.getElementById('level'+level);
+  if(selected){
+    selected.classList.add('selected');
+    const title=selected.querySelector('b');
+    if(title) title.textContent=level+' ✓';
+  }
+}
 function startChat(){document.getElementById('chatTitle').textContent=current+' - Level '+selectedLevel;document.getElementById('userBubble').style.display='none';show('chat')}
 let recognition=null;
 let listening=false;
