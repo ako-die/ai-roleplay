@@ -49,6 +49,19 @@ button{font:inherit;cursor:pointer}.primary{width:100%;border:0;background:#ffc9
 <div class="hero"><h2 id="roleTitle">👋 Greeting</h2><p id="roleDesc"></p>
 <ul class="checks"><li>Menyapa dengan ramah</li><li>Antusias dalam melayani</li><li>Menanyakan nama customer</li><li>Menyebut nama customer</li><li>Menanyakan kebutuhan customer</li></ul></div>
 <p><b>Pilih Level</b></p>
+
+<div class="card" style="margin:16px 0;padding:16px">
+  <h3 style="margin-top:0">Pilih Customer</h3>
+  <div style="display:flex;gap:12px;flex-wrap:wrap">
+    <button id="genderMale" class="level-card selected" onclick="selectCustomerGender('male')" style="flex:1;min-width:130px">
+      👨 Pria <span id="genderMaleCheck">✓</span>
+    </button>
+    <button id="genderFemale" class="level-card" onclick="selectCustomerGender('female')" style="flex:1;min-width:130px">
+      👩 Wanita <span id="genderFemaleCheck" style="display:none">✓</span>
+    </button>
+  </div>
+</div>
+
 <div class="levels">
 <div id="levelEasy" class="level" onclick="selectLevel('Easy')"><b>Easy</b>Customer ramah</div>
 <div id="levelNormal" class="level selected" onclick="selectLevel('Normal')"><b>Normal ✓</b>Customer biasa</div>
@@ -78,10 +91,27 @@ let selectedLevel='Normal';
 function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
 function openRole(n,i,d){current=n;document.getElementById('roleTitle').textContent=i+' '+n;document.getElementById('roleDesc').textContent=d;show('role')}
 function selectLevel(level){selectedLevel=level;document.querySelectorAll('.level').forEach(x=>x.classList.remove('selected'));document.getElementById('level'+level).classList.add('selected');document.getElementById('level'+level).querySelector('b').textContent=level+' ✓'}
+
+function selectCustomerGender(gender){
+  customerGender=gender;
+  const male=document.getElementById('genderMale');
+  const female=document.getElementById('genderFemale');
+  const maleCheck=document.getElementById('genderMaleCheck');
+  const femaleCheck=document.getElementById('genderFemaleCheck');
+  if(male&&female){
+    male.classList.toggle('selected',gender==='male');
+    female.classList.toggle('selected',gender==='female');
+  }
+  if(maleCheck) maleCheck.style.display=gender==='male'?'inline':'none';
+  if(femaleCheck) femaleCheck.style.display=gender==='female'?'inline':'none';
+}
+
 function startChat(){document.getElementById('chatTitle').textContent=current+' - Level '+selectedLevel;document.getElementById('userBubble').style.display='none';show('chat')}
 let recognition=null;
 let listening=false;
 let conversationTurn=0;
+  customerName=customerGender==='female'?'Sari':'Budi';
+let customerGender='male';
 let customerName='';
 let customerNeed='';
 let lastCustomerReply='';
@@ -158,10 +188,10 @@ function customerReply(text){
     }else{
       reply='Baik. Nama saya Budi.';
     }
-    customerName='Budi';
+    customerName=customerGender==='female'?'Sari':'Budi';
   }else if(conversationTurn===2){
     if(lower.includes('nama') && !customerName){
-      customerName='Budi';
+      customerName=customerGender==='female'?'Sari':'Budi';
       reply='Nama saya Budi.';
     }else if(lower.includes('kebutuhan')||lower.includes('bantu')||lower.includes('keperluan')){
       reply='Saya ingin setor tunai, Pak/Bu.';
@@ -220,11 +250,21 @@ function customerReply(text){
 function speakCustomer(text){
   if(!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
-  const utterance=new SpeechSynthesisUtterance(text);
-  utterance.lang='id-ID';
-  utterance.rate=0.95;
-  utterance.pitch=1;
-  window.speechSynthesis.speak(utterance);
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='id-ID';
+  u.rate=0.95;
+  u.pitch=customerGender==='female'?1.12:0.90;
+
+  const voices=window.speechSynthesis.getVoices();
+  const idVoices=voices.filter(v=>(v.lang||'').toLowerCase().startsWith('id'));
+  const hints=customerGender==='female'
+    ? ['female','woman','perempuan','wanita','sari']
+    : ['male','man','laki','pria','budi'];
+
+  let chosen=idVoices.find(v=>hints.some(h=>(v.name||'').toLowerCase().includes(h)));
+  if(!chosen) chosen=idVoices[0] || voices.find(v=>(v.lang||'').toLowerCase().startsWith('id'));
+  if(chosen) u.voice=chosen;
+  window.speechSynthesis.speak(u);
 }
 
 function typeAlternative(){
