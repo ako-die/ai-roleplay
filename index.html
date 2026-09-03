@@ -1,290 +1,37 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>AI ROLEPLAY</title>
-<link rel="icon" type="image/png" href="assets/icon.png">
-<link rel="apple-touch-icon" href="assets/icon-192.png">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1597e5">
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#edf9ff;color:#12385b}
-.app{max-width:430px;margin:auto;min-height:100vh;background:#fff}
-.header{background:linear-gradient(160deg,#62c9f4,#1597e5);color:#073f83;padding:28px 22px 25px;border-radius:0 0 28px 28px}
-.header small{font-weight:700;opacity:.8}.header h1{margin:7px 0 4px;font-size:28px}.header p{margin:0}
-.progress{margin-top:18px;background:#ffffffcc;border-radius:20px;padding:13px;color:#164878}.bar{height:9px;background:#d7eaf5;border-radius:9px;overflow:hidden;margin-top:7px}.bar i{display:block;width:82%;height:100%;background:#ffc928}
-.content{padding:20px}.section{font-size:18px;font-weight:800;margin-bottom:14px}
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}.card{padding:17px 14px;border:1px solid #dcecf6;border-radius:18px;background:#fff;box-shadow:0 5px 15px #12385b10;cursor:pointer}.card:last-child{grid-column:1/2}.icon{font-size:29px}.card h3{font-size:16px;margin:8px 0 5px}.card p{font-size:12px;color:#69829a;margin:0;line-height:1.35}
-.score{margin-top:18px;padding:17px;border-radius:18px;background:#fff9d9;border:1px solid #ffe16a}
-.screen{display:none}.screen.active{display:block}.back{border:0;background:#eaf7ff;color:#0877c8;padding:11px 14px;border-radius:13px;font-weight:700;margin-bottom:16px}
-.hero{background:#eef9ff;border-radius:20px;padding:18px}.hero h2{margin:0 0 7px}.checks{margin:15px 0;padding:0;list-style:none}.checks li{margin:9px 0;font-size:13px}.checks li:before{content:"✓";color:#18a35a;font-weight:bold;margin-right:8px}
-.levels{display:grid;grid-template-columns:1fr 1fr;gap:9px}.level{border:1px solid #d7e7f0;border-radius:13px;padding:12px;font-size:12px;cursor:pointer;background:#fff}.level b{display:block;color:#0877c8;margin-bottom:4px}.level.selected{border:2px solid #1597e5;background:#eef9ff}
-button{font:inherit;cursor:pointer}.primary{width:100%;border:0;background:#ffc928;color:#173b5b;padding:14px;border-radius:14px;font-weight:800;margin-top:15px}
-.chat{border:1px solid #e1edf4;border-radius:20px;padding:15px;background:#fff}.ai{background:#f2f6f9;padding:13px;border-radius:16px 16px 16px 5px;margin:12px 0}.user{background:#0877c8;color:#fff;padding:13px;border-radius:16px 16px 5px 16px;text-align:right;margin:12px 0}.mic{display:block;margin:22px auto 8px;width:76px;height:76px;border-radius:50%;border:7px solid #d7efff;background:#1597e5;color:#fff;font-size:30px}
-.result{background:#eef9ff;border-radius:20px;padding:20px;text-align:center}.circle{width:125px;height:125px;border-radius:50%;border:12px solid #1597e5;margin:12px auto;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:#0877c8}
-.feedback{text-align:left;background:#fff;border-radius:17px;padding:15px;margin-top:15px}.good{color:#15904d}.warn{color:#a66b00}
-.splash-screen{min-height:100vh;background:#eaf8ff;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}.splash-art{width:100%;height:100vh;object-fit:cover;display:block}.splash-start{position:absolute;left:50%;bottom:8.5%;transform:translateX(-50%);width:58%;border:0;border-radius:30px;padding:15px;background:#ffc928;color:#173b5b;font-weight:900;font-size:17px;box-shadow:0 6px 18px #0877c830}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#35106b">
+  <title>MONITORING WORK</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="favicon-64.png">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="app">
-<section id="splash" class="screen active"><div class="splash-screen" onclick="show('home')" style="cursor:pointer"><img src="assets/splash.png" class="splash-art" alt="AI ROLEPLAY"></div></section>
+  <div id="splashScreen" class="splash-screen" aria-label="MONITORING WORK">
+    <img src="splash-1080x1920.png" alt="MONITORING WORK">
+  </div>
+  <div class="app">
+    <header class="topbar">
+      <div class="menu">☰</div>
+      <div>
+        <div class="brand">MONITORING WORK</div>
+        <div class="subtitle">Monitoring Kegiatan Harian</div>
+      </div>
+      <div class="more">⋮</div>
+    </header>
 
-<section id="home" class="screen">
-<div class="header"><small>TRAINING PLATFORM</small><h1>AI ROLEPLAY</h1><p>Practice • Interact • Improve</p>
-<div class="progress"><b>Total Progress — 82%</b><div class="bar"><i></i></div></div></div>
-<div class="content"><div class="section">Pilih Latihan Roleplay</div>
-<div class="cards">
-<div class="card" onclick="openRole('Greeting','👋','Berlatih menyapa dengan ramah, melayani dengan antusias, menanyakan nama, menyebut nama customer, dan menggali kebutuhan.')"><div class="icon">👋</div><h3>Greeting</h3><p>Menyapa & menggali kebutuhan</p></div>
-<div class="card" onclick="openRole('Sosialisasi','📢','Berlatih menyampaikan informasi mengenai survey pelayanan dengan ramah dan natural.')"><div class="icon">📢</div><h3>Sosialisasi</h3><p>Informasi survey pelayanan</p></div>
-<div class="card" onclick="openRole('Edukasi','💡','Berlatih menyampaikan edukasi penilaian BSQ dan CE dengan bahasa yang mudah dipahami.')"><div class="icon">💡</div><h3>Edukasi</h3><p>Edukasi BSQ & CE</p></div>
-<div class="card" onclick="openRole('Telling','💼','Berlatih menawarkan produk berdasarkan kebutuhan customer dan memberikan solusi.')"><div class="icon">💼</div><h3>Telling</h3><p>Penawaran produk & solusi</p></div>
-<div class="card" onclick="openRole('Apresiasi','🙏','Berlatih mengucapkan terima kasih, menanyakan bantuan lain, dan menyampaikan magic word.')"><div class="icon">🙏</div><h3>Apresiasi</h3><p>Terima kasih & akhir layanan</p></div>
-</div><div class="score"><b>🏆 Total Score: 82/100</b><p style="margin:7px 0 0">Terus berlatih untuk meningkatkan kualitas interaksi.</p></div></div>
-</section>
+    <main id="content"></main>
 
-<section id="role" class="screen"><div class="content">
-<button class="back" onclick="show('home')">← Kembali</button>
-<div class="hero"><h2 id="roleTitle">👋 Greeting</h2><p id="roleDesc"></p>
-<ul class="checks"><li>Menyapa dengan ramah</li><li>Antusias dalam melayani</li><li>Menanyakan nama customer</li><li>Menyebut nama customer</li><li>Menanyakan kebutuhan customer</li></ul></div>
-<p><b>Pilih Level</b></p>
-<div class="levels">
-<div id="levelEasy" class="level" onclick="selectLevel('Easy')"><b>Easy</b>Customer ramah</div>
-<div id="levelNormal" class="level selected" onclick="selectLevel('Normal')"><b>Normal ✓</b>Customer biasa</div>
-<div id="levelChallenging" class="level" onclick="selectLevel('Challenging')"><b>Challenging</b>Customer terburu-buru</div>
-<div id="levelExpert" class="level" onclick="selectLevel('Expert')"><b>Expert</b>Customer kritis</div>
-</div>
-<button class="primary" onclick="startChat()">Mulai Roleplay</button>
-</div></section>
+    <nav class="bottom-nav">
+      <button data-page="home" class="nav-item active"><span>⌂</span><small>Home</small></button>
+      <button data-page="monitoring" class="nav-item"><span>☷</span><small>Monitoring</small></button>
+      <button data-page="settings" class="nav-item"><span>⚙</span><small>Pengaturan</small></button>
+    </nav>
+  </div>
 
-<section id="chat" class="screen"><div class="content">
-<button class="back" onclick="show('role')">← Kembali</button><h2 id="chatTitle">Greeting - Level Normal</h2>
-<div class="chat"><b>🤖 AI Customer</b><div class="ai">“Selamat pagi, saya ingin melakukan transaksi.”</div>
-<div id="userBubble" class="user" style="display:none"></div>
-<button class="mic" onclick="speak()">🎙️</button><p style="text-align:center;color:#6c8499">Tekan mikrofon dan ucapkan respons Anda</p>
-<button class="primary" onclick="typeAlternative()">Ketik Teks Sebagai Alternatif</button></div></div></section>
-
-<section id="result" class="screen"><div class="content">
-<button class="back" onclick="show('home')">← Home</button><div class="result"><h2>Roleplay Selesai! 🎉</h2><div class="circle">86</div><b>Score Anda / 100</b><p>Greeting • Level Normal</p>
-<div class="feedback"><h3>Feedback AI</h3><p class="good">✓ Menyapa dengan ramah</p><p class="good">✓ Menanyakan nama customer</p><p class="good">✓ Menyebut nama customer</p><p class="good">✓ Menggali kebutuhan</p><p class="warn">⚠ Tingkatkan antusiasme saat menggali kebutuhan.</p></div></div>
-<button class="primary" onclick="show('chat')">🔄 Ulangi Roleplay</button><button class="primary" style="background:#0877c8;color:white" onclick="show('home')">Simpan Hasil</button>
-</div></section>
-</div>
-<script>
-let current='Greeting';
-let selectedLevel='Normal';
-
-function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
-function openRole(n,i,d){current=n;document.getElementById('roleTitle').textContent=i+' '+n;document.getElementById('roleDesc').textContent=d;show('role')}
-function selectLevel(level){
-  selectedLevel=level;
-
-  document.querySelectorAll('.level').forEach(card=>{
-    card.classList.remove('selected');
-    const title=card.querySelector('b');
-    if(title){
-      title.textContent=title.textContent.replace(/\s*✓\s*$/,'');
-    }
-  });
-
-  const selected=document.getElementById('level'+level);
-  if(selected){
-    selected.classList.add('selected');
-    const title=selected.querySelector('b');
-    if(title) title.textContent=level+' ✓';
-  }
-}
-function startChat(){document.getElementById('chatTitle').textContent=current+' - Level '+selectedLevel;document.getElementById('userBubble').style.display='none';show('chat')}
-let recognition=null;
-let listening=false;
-let conversationTurn=0;
-let customerName='';
-let customerNeed='';
-let lastCustomerReply='';
-
-function speak(){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){
-    const text=prompt('Browser belum mendukung microphone. Ketik respons Anda:');
-    if(text) showUserText(text);
-    return;
-  }
-  if(listening) return;
-  recognition=new SR();
-  recognition.lang='id-ID';
-  recognition.interimResults=false;
-  recognition.maxAlternatives=1;
-  recognition.onstart=()=>{
-    listening=true;
-    document.querySelector('.mic').textContent='⏹️';
-  };
-  recognition.onresult=(e)=>{
-    showUserText(e.results[0][0].transcript);
-  };
-  recognition.onerror=(e)=>{
-    listening=false;
-    document.querySelector('.mic').textContent='🎙️';
-    if(e.error==='not-allowed') alert('Izin microphone belum diberikan. Silakan izinkan microphone untuk AI ROLEPLAY.');
-    else if(e.error!=='aborted') alert('Microphone belum menangkap suara. Silakan coba lagi.');
-  };
-  recognition.onend=()=>{
-    listening=false;
-    document.querySelector('.mic').textContent='🎙️';
-  };
-  recognition.start();
-}
-
-function showUserText(text){
-  const b=document.getElementById('userBubble');
-  b.style.display='block';
-  b.textContent='“'+text+'”';
-  conversationTurn++;
-  setTimeout(()=>customerReply(text),650);
-}
-
-function detectName(text){
-  const m=text.match(/(?:nama saya|saya bernama|saya)\s+([A-Za-zÀ-ÿ]{2,20})(?:\s|$|[,.])/i);
-  if(m){
-    const candidate=m[1];
-    const blocked=['mau','ingin','akan','datang','butuh','perlu','bisa','ingin'];
-    if(!blocked.includes(candidate.toLowerCase())) customerName=candidate;
-  }
-}
-
-function detectNeed(text){
-  const t=text.toLowerCase();
-  if(t.includes('setor')||t.includes('tunai')) customerNeed='setor tunai';
-  else if(t.includes('tarik')||t.includes('ambil uang')) customerNeed='tarik tunai';
-  else if(t.includes('transfer')) customerNeed='transfer';
-  else if(t.includes('rekening')) customerNeed='rekening';
-  else if(t.includes('kartu')||t.includes('atm')) customerNeed='kartu/ATM';
-}
-
-function customerReply(text){
-  const lower=text.toLowerCase();
-  detectName(text);
-  detectNeed(text);
-
-  let reply='Baik, silakan Pak/Bu. Saya siap dibantu.';
-  if(conversationTurn===1){
-    if(lower.includes('pagi')||lower.includes('siang')||lower.includes('sore')){
-      reply='Selamat pagi juga. Nama saya Budi.';
-    }else if(lower.includes('nama')){
-      reply='Nama saya Budi.';
-    }else{
-      reply='Baik. Nama saya Budi.';
-    }
-    customerName='Budi';
-  }else if(conversationTurn===2){
-    if(lower.includes('nama') && !customerName){
-      customerName='Budi';
-      reply='Nama saya Budi.';
-    }else if(lower.includes('kebutuhan')||lower.includes('bantu')||lower.includes('keperluan')){
-      reply='Saya ingin setor tunai, Pak/Bu.';
-      customerNeed='setor tunai';
-    }else{
-      reply='Baik, Pak/Bu. Saya ingin setor tunai.';
-      customerNeed='setor tunai';
-    }
-  }else if(conversationTurn===3){
-    if(lower.includes('setor')||lower.includes('tunai')){
-      customerNeed='setor tunai';
-      reply='Iya, saya mau setor tunai. Prosesnya bagaimana ya?';
-    }else if(lower.includes('kebutuhan')||lower.includes('bantu')){
-      customerNeed='setor tunai';
-      reply='Saya ingin setor tunai dan ingin tahu apakah bisa dibantu di mesin digital.';
-    }else{
-      reply='Saya ingin setor tunai, Pak/Bu. Bisa dibantu prosesnya?';
-      customerNeed='setor tunai';
-    }
-  }else if(conversationTurn===4){
-    if(lower.includes('mesin')||lower.includes('digital')){
-      reply='Oh baik. Kalau menggunakan mesin digital, apakah tetap perlu bantuan petugas?';
-    }else if(lower.includes('bantu')||lower.includes('proses')){
-      reply='Baik, terima kasih. Saya akan mengikuti arahannya.';
-    }else{
-      reply='Baik, terima kasih. Lalu langkah berikutnya apa ya?';
-    }
-  }else{
-    const options=[
-      'Baik, terima kasih penjelasannya. Saya mengerti.',
-      'Oh begitu. Terima kasih sudah membantu saya.',
-      'Baik, saya ikuti arahannya. Terima kasih ya.',
-      'Siap, Pak/Bu. Terima kasih atas bantuannya.'
-    ];
-    reply=options[(conversationTurn-5)%options.length];
-  }
-
-  if(reply===lastCustomerReply){
-    reply='Baik, saya mengerti. Silakan dilanjutkan, Pak/Bu.';
-  }
-  lastCustomerReply=reply;
-
-  const chat=document.querySelector('.chat');
-  const oldReply=document.getElementById('customerReply');
-  if(oldReply) oldReply.remove();
-
-  const div=document.createElement('div');
-  div.id='customerReply';
-  div.className='ai';
-  div.innerHTML='<b>🤖 AI Customer</b><br>“'+reply+'”';
-  chat.insertBefore(div, document.querySelector('.mic'));
-
-  speakCustomer(reply);
-}
-
-function speakCustomer(text){
-  if(!('speechSynthesis' in window)) return;
-  window.speechSynthesis.cancel();
-
-  const utterance=new SpeechSynthesisUtterance(text);
-  utterance.lang='id-ID';
-  utterance.rate=0.94;
-
-  // V4 tetap dipertahankan. Hanya suara AI Customer yang dibuat lebih maskulin.
-  // Prioritaskan voice Indonesia yang namanya mengandung indikasi suara pria.
-  const voices=window.speechSynthesis.getVoices();
-  const idVoices=voices.filter(v=>(v.lang||'').toLowerCase().startsWith('id'));
-  const maleHints=['male','man','pria','laki','bapak','david','andi','rudi','budi'];
-  const maleVoice=idVoices.find(v=>
-    maleHints.some(h=>(v.name||'').toLowerCase().includes(h))
-  );
-
-  if(maleVoice){
-    utterance.voice=maleVoice;
-    utterance.pitch=0.88;
-  }else{
-    // Jika perangkat hanya menyediakan voice wanita Indonesia,
-    // gunakan voice Indonesia yang tersedia dengan pitch lebih rendah.
-    utterance.voice=idVoices[0] || voices.find(v=>(v.lang||'').toLowerCase().startsWith('id')) || null;
-    utterance.pitch=0.72;
-  }
-
-  window.speechSynthesis.speak(utterance);
-}
-
-// Beberapa browser Android baru mengisi daftar voice setelah voiceschanged.
-if('speechSynthesis' in window){
-  window.speechSynthesis.onvoiceschanged=function(){};
-}
-
-function typeAlternative(){
-  const text=prompt('Ketik respons Anda:');
-  if(text && text.trim()) showUserText(text.trim());
-}
-
-function startChat(){
-  conversationTurn=0;
-  customerName='';
-  customerNeed='';
-  lastCustomerReply='';
-  document.getElementById('chatTitle').textContent=current+' - Level '+selectedLevel;
-  document.getElementById('userBubble').style.display='none';
-  const oldReply=document.getElementById('customerReply');
-  if(oldReply) oldReply.remove();
-  show('chat');
-}
-</script>
+  <script src="app.js"></script>
 </body>
 </html>
