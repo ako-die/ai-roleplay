@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AI ROLEPLAY</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#edf9ff;color:#12385b}
+.app{max-width:430px;margin:auto;min-height:100vh;background:#fff}
+.header{background:linear-gradient(160deg,#62c9f4,#1597e5);color:#073f83;padding:28px 22px 25px;border-radius:0 0 28px 28px}
+.header small{font-weight:700;opacity:.8}.header h1{margin:7px 0 4px;font-size:28px}.header p{margin:0}
+.progress{margin-top:18px;background:#ffffffcc;border-radius:20px;padding:13px;color:#164878}.bar{height:9px;background:#d7eaf5;border-radius:9px;overflow:hidden;margin-top:7px}.bar i{display:block;width:82%;height:100%;background:#ffc928}
+.content{padding:20px}.section{font-size:18px;font-weight:800;margin-bottom:14px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}.card{padding:17px 14px;border:1px solid #dcecf6;border-radius:18px;background:#fff;box-shadow:0 5px 15px #12385b10;cursor:pointer}.card:last-child{grid-column:1/2}.icon{font-size:29px}.card h3{font-size:16px;margin:8px 0 5px}.card p{font-size:12px;color:#69829a;margin:0;line-height:1.35}
+.score{margin-top:18px;padding:17px;border-radius:18px;background:#fff9d9;border:1px solid #ffe16a}
+.screen{display:none}.screen.active{display:block}.back{border:0;background:#eaf7ff;color:#0877c8;padding:11px 14px;border-radius:13px;font-weight:700;margin-bottom:16px}
+.hero{background:#eef9ff;border-radius:20px;padding:18px}.hero h2{margin:0 0 7px}.checks{margin:15px 0;padding:0;list-style:none}.checks li{margin:9px 0;font-size:13px}.checks li:before{content:"✓";color:#18a35a;font-weight:bold;margin-right:8px}
+.levels{display:grid;grid-template-columns:1fr 1fr;gap:9px}.level{border:1px solid #d7e7f0;border-radius:13px;padding:12px;font-size:12px}.level b{display:block;color:#0877c8;margin-bottom:4px}
+button{font:inherit;cursor:pointer}.primary{width:100%;border:0;background:#ffc928;color:#173b5b;padding:14px;border-radius:14px;font-weight:800;margin-top:15px}
+.chat{border:1px solid #e1edf4;border-radius:20px;padding:15px;background:#fff}.ai{background:#f2f6f9;padding:13px;border-radius:16px 16px 16px 5px;margin:12px 0}.user{background:#0877c8;color:#fff;padding:13px;border-radius:16px 16px 5px 16px;text-align:right;margin:12px 0}.mic{display:block;margin:22px auto 8px;width:76px;height:76px;border-radius:50%;border:7px solid #d7efff;background:#1597e5;color:#fff;font-size:30px}
+.result{background:#eef9ff;border-radius:20px;padding:20px;text-align:center}.circle{width:125px;height:125px;border-radius:50%;border:12px solid #1597e5;margin:12px auto;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:#0877c8}
+.feedback{text-align:left;background:#fff;border-radius:17px;padding:15px;margin-top:15px}.good{color:#15904d}.warn{color:#a66b00}
+</style>
+</head>
+<body>
+<div class="app">
+<section id="home" class="screen active">
+<div class="header"><small>TRAINING PLATFORM</small><h1>AI ROLEPLAY</h1><p>Practice • Interact • Improve</p>
+<div class="progress"><b>Total Progress — 82%</b><div class="bar"><i></i></div></div></div>
+<div class="content"><div class="section">Pilih Latihan Roleplay</div>
+<div class="cards">
+<div class="card" onclick="openRole('Greeting','👋','Berlatih menyapa dengan ramah, melayani dengan antusias, menanyakan nama, menyebut nama customer, dan menggali kebutuhan.')"><div class="icon">👋</div><h3>Greeting</h3><p>Menyapa & menggali kebutuhan</p></div>
+<div class="card" onclick="openRole('Sosialisasi','📢','Berlatih menyampaikan informasi mengenai survey pelayanan dengan ramah dan natural.')"><div class="icon">📢</div><h3>Sosialisasi</h3><p>Informasi survey pelayanan</p></div>
+<div class="card" onclick="openRole('Edukasi','💡','Berlatih menyampaikan edukasi penilaian BSQ dan CE dengan bahasa yang mudah dipahami.')"><div class="icon">💡</div><h3>Edukasi</h3><p>Edukasi BSQ & CE</p></div>
+<div class="card" onclick="openRole('Telling','💼','Berlatih menawarkan produk berdasarkan kebutuhan customer dan memberikan solusi.')"><div class="icon">💼</div><h3>Telling</h3><p>Penawaran produk & solusi</p></div>
+<div class="card" onclick="openRole('Apresiasi','🙏','Berlatih mengucapkan terima kasih, menanyakan bantuan lain, dan menyampaikan magic word.')"><div class="icon">🙏</div><h3>Apresiasi</h3><p>Terima kasih & akhir layanan</p></div>
+</div><div class="score"><b>🏆 Total Score: 82/100</b><p style="margin:7px 0 0">Terus berlatih untuk meningkatkan kualitas interaksi.</p></div></div>
+</section>
+
+<section id="role" class="screen"><div class="content">
+<button class="back" onclick="show('home')">← Kembali</button>
+<div class="hero"><h2 id="roleTitle">👋 Greeting</h2><p id="roleDesc"></p>
+<ul class="checks"><li>Menyapa dengan ramah</li><li>Antusias dalam melayani</li><li>Menanyakan nama customer</li><li>Menyebut nama customer</li><li>Menanyakan kebutuhan customer</li></ul></div>
+<p><b>Pilih Level</b></p><div class="levels"><div class="level"><b>Easy</b>Customer ramah</div><div class="level"><b>Normal ✓</b>Customer biasa</div><div class="level"><b>Challenging</b>Customer terburu-buru</div><div class="level"><b>Expert</b>Customer kritis</div></div>
+<button class="primary" onclick="startChat()">Mulai Roleplay</button>
+</div></section>
+
+<section id="chat" class="screen"><div class="content">
+<button class="back" onclick="show('role')">← Kembali</button><h2 id="chatTitle">Greeting - Level Normal</h2>
+<div class="chat"><b>🤖 AI Customer</b><div class="ai">“Selamat pagi, saya ingin melakukan transaksi.”</div>
+<div id="userBubble" class="user" style="display:none"></div>
+<button class="mic" onclick="speak()">🎙️</button><p style="text-align:center;color:#6c8499">Tekan mikrofon dan ucapkan respons Anda</p>
+<button class="primary" onclick="speak()">Ketik Teks Sebagai Alternatif</button></div></div></section>
+
+<section id="result" class="screen"><div class="content">
+<button class="back" onclick="show('home')">← Home</button><div class="result"><h2>Roleplay Selesai! 🎉</h2><div class="circle">86</div><b>Score Anda / 100</b><p>Greeting • Level Normal</p>
+<div class="feedback"><h3>Feedback AI</h3><p class="good">✓ Menyapa dengan ramah</p><p class="good">✓ Menanyakan nama customer</p><p class="good">✓ Menyebut nama customer</p><p class="good">✓ Menggali kebutuhan</p><p class="warn">⚠ Tingkatkan antusiasme saat menggali kebutuhan.</p></div></div>
+<button class="primary" onclick="show('chat')">🔄 Ulangi Roleplay</button><button class="primary" style="background:#0877c8;color:white" onclick="show('home')">Simpan Hasil</button>
+</div></section>
+</div>
+<script>
+let current='Greeting';
+function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
+function openRole(n,i,d){current=n;document.getElementById('roleTitle').textContent=i+' '+n;document.getElementById('roleDesc').textContent=d;show('role')}
+function startChat(){document.getElementById('chatTitle').textContent=current+' - Level Normal';document.getElementById('userBubble').style.display='none';show('chat')}
+function speak(){let b=document.getElementById('userBubble');b.style.display='block';b.textContent='“Selamat pagi Bapak, selamat datang. Perkenalkan saya Andi. Boleh saya tahu dengan Bapak siapa?”';setTimeout(()=>show('result'),700)}
+</script>
+</body>
+</html>
