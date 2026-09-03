@@ -53,10 +53,10 @@ button{font:inherit;cursor:pointer}.primary{width:100%;border:0;background:#ffc9
 <div class="card" style="margin:16px 0;padding:16px">
   <h3 style="margin-top:0">Pilih Customer</h3>
   <div style="display:flex;gap:12px;flex-wrap:wrap">
-    <button id="genderMale" class="level-card selected" onclick="selectCustomerGender('male')" style="flex:1;min-width:130px">
+    <button type="button" id="genderMale" class="level-card selected" onclick="selectCustomerGender('male')" style="flex:1;min-width:130px">
       👨 Pria <span id="genderMaleCheck">✓</span>
     </button>
-    <button id="genderFemale" class="level-card" onclick="selectCustomerGender('female')" style="flex:1;min-width:130px">
+    <button type="button" id="genderFemale" class="level-card" onclick="selectCustomerGender('female')" style="flex:1;min-width:130px">
       👩 Wanita <span id="genderFemaleCheck" style="display:none">✓</span>
     </button>
   </div>
@@ -106,11 +106,20 @@ function selectCustomerGender(gender){
   if(femaleCheck) femaleCheck.style.display=gender==='female'?'inline':'none';
 }
 
-function startChat(){document.getElementById('chatTitle').textContent=current+' - Level '+selectedLevel;document.getElementById('userBubble').style.display='none';show('chat')}
+function startChat(){
+  conversationTurn=0;
+  customerName=customerGender==='female'?'Sari':'Budi';
+  customerNeed='';
+  lastCustomerReply='';
+  const title=document.getElementById('chatTitle');
+  if(title) title.textContent=current+' - Level '+selectedLevel+' • '+(customerGender==='female'?'👩 Customer Wanita':'👨 Customer Pria');
+  const userBubble=document.getElementById('userBubble');
+  if(userBubble) userBubble.style.display='none';
+  show('chat');
+}
 let recognition=null;
 let listening=false;
 let conversationTurn=0;
-  customerName=customerGender==='female'?'Sari':'Budi';
 let customerGender='male';
 let customerName='';
 let customerNeed='';
