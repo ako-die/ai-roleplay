@@ -20,11 +20,12 @@ button{font:inherit;cursor:pointer}.primary{width:100%;border:0;background:#ffc9
 .chat{border:1px solid #e1edf4;border-radius:20px;padding:15px;background:#fff}.ai{background:#f2f6f9;padding:13px;border-radius:16px 16px 16px 5px;margin:12px 0}.user{background:#0877c8;color:#fff;padding:13px;border-radius:16px 16px 5px 16px;text-align:right;margin:12px 0}.mic{display:block;margin:22px auto 8px;width:76px;height:76px;border-radius:50%;border:7px solid #d7efff;background:#1597e5;color:#fff;font-size:30px}
 .result{background:#eef9ff;border-radius:20px;padding:20px;text-align:center}.circle{width:125px;height:125px;border-radius:50%;border:12px solid #1597e5;margin:12px auto;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:#0877c8}
 .feedback{text-align:left;background:#fff;border-radius:17px;padding:15px;margin-top:15px}.good{color:#15904d}.warn{color:#a66b00}
-</style>
+.splash-screen{min-height:100vh;background:#eaf8ff;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}.splash-art{width:100%;height:100vh;object-fit:cover;display:block}.splash-start{position:absolute;left:50%;bottom:8.5%;transform:translateX(-50%);width:58%;border:0;border-radius:30px;padding:15px;background:#ffc928;color:#173b5b;font-weight:900;font-size:17px;box-shadow:0 6px 18px #0877c830}</style>
 </head>
 <body>
 <div class="app">
-<section id="home" class="screen active">
+<section id="splash" class="screen active"><div class="splash-screen"><img src="assets/splash.png" class="splash-art" alt="AI ROLEPLAY"><button class="splash-start" onclick="show('home')">▶ MULAI</button></div></section>
+<section id="home" class="screen">
 <div class="header"><small>TRAINING PLATFORM</small><h1>AI ROLEPLAY</h1><p>Practice • Interact • Improve</p>
 <div class="progress"><b>Total Progress — 82%</b><div class="bar"><i></i></div></div></div>
 <div class="content"><div class="section">Pilih Latihan Roleplay</div>
