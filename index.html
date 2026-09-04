@@ -166,7 +166,7 @@ function customerReply(text){
   detectName(text);
   detectNeed(text);
 
-  let reply='Baik, silakan Pak/Bu. Saya siap dibantu.';
+  let reply='Baik, saya siap dibantu.';
   if(conversationTurn===1){
     if(lower.includes('pagi')||lower.includes('siang')||lower.includes('sore')){
       reply='Selamat pagi juga. Nama saya Sari.';
@@ -181,10 +181,10 @@ function customerReply(text){
       customerName='Sari';
       reply='Nama saya Sari.';
     }else if(lower.includes('kebutuhan')||lower.includes('bantu')||lower.includes('keperluan')){
-      reply='Saya ingin setor tunai, Pak/Bu.';
+      reply='Saya ingin setor tunai.';
       customerNeed='setor tunai';
     }else{
-      reply='Baik, Pak/Bu. Saya ingin setor tunai.';
+      reply='Baik, saya ingin setor tunai.';
       customerNeed='setor tunai';
     }
   }else if(conversationTurn===3){
@@ -195,7 +195,7 @@ function customerReply(text){
       customerNeed='setor tunai';
       reply='Saya ingin setor tunai dan ingin tahu apakah bisa dibantu di mesin digital.';
     }else{
-      reply='Saya ingin setor tunai, Pak/Bu. Bisa dibantu prosesnya?';
+      reply='Saya ingin setor tunai. Bisa dibantu prosesnya?';
       customerNeed='setor tunai';
     }
   }else if(conversationTurn===4){
@@ -211,13 +211,13 @@ function customerReply(text){
       'Baik, terima kasih penjelasannya. Saya mengerti.',
       'Oh begitu. Terima kasih sudah membantu saya.',
       'Baik, saya ikuti arahannya. Terima kasih ya.',
-      'Siap, Pak/Bu. Terima kasih atas bantuannya.'
+      'Siap. Terima kasih atas bantuannya.'
     ];
     reply=options[(conversationTurn-5)%options.length];
   }
 
   if(reply===lastCustomerReply){
-    reply='Baik, saya mengerti. Silakan dilanjutkan, Pak/Bu.';
+    reply='Baik, saya mengerti. Silakan dilanjutkan.';
   }
   lastCustomerReply=reply;
 
