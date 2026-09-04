@@ -169,17 +169,17 @@ function customerReply(text){
   let reply='Baik, silakan Pak/Bu. Saya siap dibantu.';
   if(conversationTurn===1){
     if(lower.includes('pagi')||lower.includes('siang')||lower.includes('sore')){
-      reply='Selamat pagi juga. Nama saya Budi.';
+      reply='Selamat pagi juga. Nama saya Sari.';
     }else if(lower.includes('nama')){
-      reply='Nama saya Budi.';
+      reply='Nama saya Sari.';
     }else{
-      reply='Baik. Nama saya Budi.';
+      reply='Baik. Nama saya Sari.';
     }
-    customerName='Budi';
+    customerName='Sari';
   }else if(conversationTurn===2){
     if(lower.includes('nama') && !customerName){
-      customerName='Budi';
-      reply='Nama saya Budi.';
+      customerName='Sari';
+      reply='Nama saya Sari.';
     }else if(lower.includes('kebutuhan')||lower.includes('bantu')||lower.includes('keperluan')){
       reply='Saya ingin setor tunai, Pak/Bu.';
       customerNeed='setor tunai';
